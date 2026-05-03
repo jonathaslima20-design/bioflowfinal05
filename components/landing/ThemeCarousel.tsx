@@ -17,15 +17,9 @@ type Slide = {
   demo: ReturnType<typeof landingDemoFor>;
 };
 
-function defaultSlides(): Slide[] {
-  const featured = ['brutalist', 'aurora', 'conversion', 'creator', 'cyber'];
-  return featured
-    .filter(k => THEMES[k])
-    .map(themeKey => ({ themeKey, demo: landingDemoFor(null) }));
-}
-
 export function ThemeCarousel() {
-  const [slides, setSlides] = useState<Slide[]>(defaultSlides());
+  const [slides, setSlides] = useState<Slide[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [prefersReduced, setPrefersReduced] = useState(false);
@@ -47,6 +41,7 @@ export function ThemeCarousel() {
         setSlides(valid.map(p => ({ themeKey: p.theme_key, demo: landingDemoFor(p) })));
       }
       setSettings(cfg);
+      setLoaded(true);
     })();
   }, []);
 
@@ -145,6 +140,13 @@ export function ThemeCarousel() {
       aria-label="Temas da BioFlowzy"
     >
       <div className="relative flex items-center justify-center min-h-[558px] select-none">
+        {!loaded && (
+          <div
+            aria-hidden
+            className="absolute rounded-[40px] bg-neutral-100 animate-pulse"
+            style={{ width: 260, height: 540 }}
+          />
+        )}
         {slides.map((s, i) => {
           const offset = i - index;
           const isActive = i === index;
