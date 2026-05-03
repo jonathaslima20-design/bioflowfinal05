@@ -29,7 +29,7 @@ export const DEMO_VIDEOS = [
     id: 'v1',
     platform: 'youtube',
     title: 'Como criar uma bio que converte',
-    embed_url: '',
+    embed_url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     thumbnail: 'https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg?auto=compress&cs=tinysrgb&w=400',
   },
 ];

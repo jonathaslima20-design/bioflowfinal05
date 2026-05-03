@@ -18,6 +18,7 @@ import {
   updateLandingCarouselSettings,
 } from '@/lib/theme-showcase';
 import { ArrowUp, ArrowDown, Save, RotateCcw, Copy, Plus, Trash2, CopyPlus } from 'lucide-react';
+import { parseVideoUrl } from '@/lib/embed';
 
 type Tab = 'catalog' | 'landing';
 
@@ -271,6 +272,22 @@ export default function AdminThemeShowcasePage() {
     mutateArr(videosField as any, (arr) => {
       const next = [...arr];
       next[idx] = { ...next[idx], [field]: value };
+      return next;
+    });
+  }
+  function normalizeVideoUrl(idx: number) {
+    mutateArr(videosField as any, (arr) => {
+      const next = [...arr];
+      const v = { ...next[idx] };
+      const raw = (v.embed_url ?? '').trim();
+      if (!raw) { next[idx] = v; return next; }
+      const parsed = parseVideoUrl(raw);
+      if (parsed) {
+        v.embed_url = parsed.embed_url;
+        if (parsed.platform !== 'generic') v.platform = parsed.platform;
+        if (!v.thumbnail && parsed.thumbnail) v.thumbnail = parsed.thumbnail;
+      }
+      next[idx] = v;
       return next;
     });
   }
@@ -600,6 +617,7 @@ export default function AdminThemeShowcasePage() {
                 </div>
                 <input type="text" value={v.embed_url ?? ''} placeholder="URL do embed (YouTube/Vimeo)"
                   onChange={(e) => setVideoField(idx, 'embed_url', e.target.value)}
+                  onBlur={() => normalizeVideoUrl(idx)}
                   className="brutal-input py-1.5 px-2 text-xs" />
                 <div className="grid sm:grid-cols-2 gap-2">
                   <div>

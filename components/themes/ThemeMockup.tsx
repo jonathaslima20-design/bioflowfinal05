@@ -20,6 +20,7 @@ type Props = {
   themeSettings?: Record<string, any>;
   width?: number;
   height?: number;
+  preview?: boolean;
 };
 
 function PhoneFrame({
@@ -173,6 +174,7 @@ function ThemeMockupBase({
   themeSettings,
   width = DEFAULT_PHONE_WIDTH,
   height = DEFAULT_PHONE_HEIGHT,
+  preview = true,
 }: Props) {
   const theme = getTheme(themeKey);
   const Component = theme.component;
@@ -211,6 +213,7 @@ function ThemeMockupBase({
           socials={socials ?? DEMO_SOCIALS}
           videos={videos ?? []}
           banners={banners ?? []}
+          preview={preview}
         />
       </div>
     </PhoneFrame>

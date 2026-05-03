@@ -1,4 +1,5 @@
 import { Play } from 'lucide-react';
+import { parseVideoUrl } from '@/lib/embed';
 
 export function VideoEmbed({ video, preview }: { video: any; preview?: boolean }) {
   const showIframe = !preview && video.embed_url;
@@ -14,10 +15,15 @@ export function VideoEmbed({ video, preview }: { video: any; preview?: boolean }
     );
   }
 
-  if (video.thumbnail) {
+  const derivedThumb = !video.thumbnail && video.embed_url
+    ? parseVideoUrl(video.embed_url)?.thumbnail || ''
+    : '';
+  const thumb = video.thumbnail || derivedThumb;
+
+  if (thumb) {
     return (
       <>
-        <img src={video.thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={thumb} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 flex items-center justify-center bg-black/20">
           <div className="rounded-full bg-white/90 p-3 shadow-lg">
             <Play className="h-5 w-5 fill-black text-black" />
