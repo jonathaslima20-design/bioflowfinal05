@@ -333,7 +333,7 @@ export function AtlasTheme({ profile, links, socials, videos, banners, track, pr
         {s.footerText && s.footerText.trim() && (
           <div className="mt-2 mb-6 text-center text-xs opacity-60" style={{ color: text }}>{s.footerText}</div>
         )}
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
 
       <style jsx>{`

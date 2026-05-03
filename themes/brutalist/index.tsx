@@ -142,7 +142,7 @@ export function BrutalistTheme({ profile, links, socials, videos, banners, track
           ))}
         </div>
 
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
         <div aria-hidden className="h-16" />
       </div>
     </div>

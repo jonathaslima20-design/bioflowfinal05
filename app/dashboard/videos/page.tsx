@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { GripVertical, Plus, Trash2, Video as VideoIcon } from 'lucide-react';
 import { parseVideoUrl } from '@/lib/embed';
+import { usePlan } from '@/hooks/use-plan';
+import { LimitBadge, UpgradeBanner } from '@/components/dashboard/LimitBadge';
+import { isUnlimited } from '@/lib/plans';
 
 type Video = {
   id: string;
@@ -22,6 +25,9 @@ export default function VideosPage() {
   const [profileId, setProfileId] = useState('');
   const [videos, setVideos] = useState<Video[]>([]);
   const [dragging, setDragging] = useState<string | null>(null);
+  const { limitOf, reload: reloadPlan } = usePlan();
+  const limit = limitOf('videos');
+  const atLimit = !isUnlimited(limit) && videos.length >= limit;
 
   useEffect(() => {
     (async () => {
@@ -34,10 +40,14 @@ export default function VideosPage() {
   }, []);
 
   async function addVideo() {
+    if (atLimit) return;
     const { data } = await supabase.from('videos').insert({
       profile_id: profileId, title: 'Novo vídeo', url: '', position: videos.length,
     }).select().single();
-    if (data) setVideos([...videos, data as Video]);
+    if (data) {
+      setVideos([...videos, data as Video]);
+      reloadPlan();
+    }
   }
 
   async function update(id: string, patch: Partial<Video>) {
@@ -76,13 +86,18 @@ export default function VideosPage() {
     <div className="max-w-3xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-display text-4xl">Vídeos</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-4xl">Vídeos</h1>
+            <LimitBadge current={videos.length} limit={limit} />
+          </div>
           <p className="text-sm font-bold text-black/60 mt-1">Cole URLs do YouTube, Vimeo, TikTok ou Instagram.</p>
         </div>
-        <button onClick={addVideo} className="brutal-btn bg-bioyellow px-4 py-2 gap-2">
+        <button onClick={addVideo} disabled={atLimit} title={atLimit ? 'Limite do plano Free atingido' : ''} className="brutal-btn bg-bioyellow px-4 py-2 gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
           <Plus className="w-4 h-4" /> Novo vídeo
         </button>
       </div>
+
+      {atLimit && <div className="mb-4"><UpgradeBanner resource="vídeos" /></div>}
 
       <div className="flex flex-col gap-4">
         {videos.length === 0 && (

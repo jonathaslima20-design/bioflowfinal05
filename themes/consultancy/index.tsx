@@ -150,7 +150,7 @@ export function ConsultancyTheme({ profile, links, socials, videos, banners, tra
           <span style={{ color: accent }}>{s.footerRight || 'Strictly Private'}</span>
         </div>
 
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
     </div>
   );

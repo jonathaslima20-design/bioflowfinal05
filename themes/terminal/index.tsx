@@ -152,7 +152,7 @@ export function TerminalTheme({ profile, links, socials, videos, banners, track,
         </div>
       </div>
 
-      {!profile.is_pro && <div className="max-w-md mx-auto"><BioflowzyBadge bgColor={profile.bg_color} /></div>}
+      <div className="max-w-md mx-auto"><BioflowzyBadge profile={profile} bgColor={profile.bg_color} /></div>
 
       <style jsx>{`
         :global(.term-caret) { display: inline-block; width: 9px; height: 16px; vertical-align: middle; animation: term-blink ${s.cursorSpeed} steps(2) infinite; }

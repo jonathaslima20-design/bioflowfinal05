@@ -252,7 +252,7 @@ export function CyberTheme({ profile, links, socials, videos, banners, track, pr
         {s.footerText && s.footerText.trim() && (
           <div className="mt-6 text-center text-[10px] tracking-widest" style={{ color: promptColor }}>{s.footerText}</div>
         )}
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
         <div aria-hidden className="h-20" />
       </div>
 

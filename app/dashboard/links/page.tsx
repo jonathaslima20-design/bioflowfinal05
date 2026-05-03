@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { GripVertical, Plus, Trash2, ExternalLink } from 'lucide-react';
 import { BioPreview } from '@/components/dashboard/BioPreview';
+import { usePlan } from '@/hooks/use-plan';
+import { LimitBadge, UpgradeBanner } from '@/components/dashboard/LimitBadge';
+import { isUnlimited } from '@/lib/plans';
 
 type Link = { id: string; title: string; url: string; position: number; is_active: boolean };
 
@@ -11,6 +14,9 @@ export default function LinksPage() {
   const [profileId, setProfileId] = useState<string>('');
   const [links, setLinks] = useState<Link[]>([]);
   const [draggingId, setDraggingId] = useState<string | null>(null);
+  const { limitOf, reload: reloadPlan } = usePlan();
+  const limit = limitOf('links');
+  const atLimit = !isUnlimited(limit) && links.length >= limit;
 
   async function load(pid: string) {
     const { data } = await supabase.from('links').select('*').eq('profile_id', pid).order('position');
@@ -27,13 +33,17 @@ export default function LinksPage() {
   }, []);
 
   async function addLink() {
+    if (atLimit) return;
     const { data } = await supabase.from('links').insert({
       profile_id: profileId,
       title: 'Novo link',
       url: 'https://',
       position: links.length,
     }).select().single();
-    if (data) setLinks([...links, data as Link]);
+    if (data) {
+      setLinks([...links, data as Link]);
+      reloadPlan();
+    }
   }
 
   async function updateLink(id: string, patch: Partial<Link>) {
@@ -64,11 +74,16 @@ export default function LinksPage() {
     <div className="grid lg:grid-cols-[1fr_360px] gap-8">
       <div className="min-w-0">
         <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-          <h1 className="font-display text-3xl md:text-4xl">Seus Links</h1>
-          <button onClick={addLink} className="brutal-btn bg-bioyellow px-3 py-2 gap-2 text-sm">
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-3xl md:text-4xl">Seus Links</h1>
+            <LimitBadge current={links.length} limit={limit} />
+          </div>
+          <button onClick={addLink} disabled={atLimit} title={atLimit ? 'Limite do plano Free atingido' : ''} className="brutal-btn bg-bioyellow px-3 py-2 gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed">
             <Plus className="w-4 h-4" /> Novo link
           </button>
         </div>
+
+        {atLimit && <div className="mb-4"><UpgradeBanner resource="links" /></div>}
 
         <div className="flex flex-col gap-3">
           {links.length === 0 && (

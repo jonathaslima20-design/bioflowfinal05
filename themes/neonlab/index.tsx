@@ -175,7 +175,7 @@ export function NeonLabTheme({ profile, links, socials, videos, banners, track, 
         {s.footerText && s.footerText.trim() && (
           <div className="mt-8 text-center text-[11px] tracking-[0.4em] uppercase" style={{ color: secondary, textShadow: `0 0 8px ${secondary}` }}>{s.footerText}</div>
         )}
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
 
       <style jsx>{`

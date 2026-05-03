@@ -387,7 +387,7 @@ export function AgencyTheme({ profile, links, socials, videos, banners, track, p
           <span>© {new Date().getFullYear()}</span>
           <span>{(s.footerText && s.footerText.trim()) || 'ALL WORKS RESERVED'}</span>
         </div>
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
 
       <style jsx>{`

@@ -213,7 +213,7 @@ export function KeynoteTheme({ profile, links, socials, videos, banners, track, 
         {s.footerText && s.footerText.trim() && (
           <div className="mt-10 text-center text-[10px] tracking-[0.4em] uppercase" style={{ color: accent }}>{s.footerText}</div>
         )}
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
 
       <style jsx>{`

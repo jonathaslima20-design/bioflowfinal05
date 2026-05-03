@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { LayoutDashboard, Link2, ChartBar as BarChart3, Palette, Settings, LogOut, Zap, ShieldCheck, Video, Image as ImageIcon, AtSign, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Link2, ChartBar as BarChart3, Palette, Settings, LogOut, Zap, ShieldCheck, Video, Image as ImageIcon, AtSign, Menu, X, Globe, ChartLine as LineChart, Gift } from 'lucide-react';
 
 const nav = [
   { href: '/dashboard', label: 'Visão geral', icon: LayoutDashboard },
@@ -14,6 +14,9 @@ const nav = [
   { href: '/dashboard/socials', label: 'Redes sociais', icon: AtSign },
   { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/dashboard/customize', label: 'Aparência', icon: Palette },
+  { href: '/dashboard/integrations', label: 'Integrações', icon: LineChart },
+  { href: '/dashboard/domain', label: 'Domínio', icon: Globe },
+  { href: '/dashboard/referral', label: 'Indique e ganhe', icon: Gift },
   { href: '/dashboard/settings', label: 'Configurações', icon: Settings },
 ];
 

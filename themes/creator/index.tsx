@@ -349,7 +349,7 @@ export function CreatorTheme({ profile, links, socials, videos, banners, track, 
         {s.footerText && s.footerText.trim() && (
           <div className="mt-6 text-center text-xs font-bold" style={{ color: text, opacity: 0.75 }}>{s.footerText}</div>
         )}
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
 
       <style jsx>{`

@@ -350,7 +350,7 @@ export function ConversionTheme({ profile, links, socials, videos, banners, trac
             </div>
           ))}
         </div>
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
 
       <style jsx>{`

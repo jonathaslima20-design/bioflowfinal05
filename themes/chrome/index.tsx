@@ -152,7 +152,7 @@ export function ChromeTheme({ profile, links, socials, videos, banners, track, p
         {s.footerText && s.footerText.trim() && (
           <div className="mt-8 text-center text-xs tracking-widest opacity-70">{s.footerText}</div>
         )}
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
       </div>
 
       <style jsx>{`

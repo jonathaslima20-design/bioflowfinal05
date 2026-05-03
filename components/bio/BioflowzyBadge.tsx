@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import { isLightColor } from '@/lib/color';
+import { can } from '@/lib/plans';
 
-export function BioflowzyBadge({ bgColor, className = '' }: { bgColor?: string; className?: string }) {
+type BadgeProfile = { plan?: string | null; plan_expires_at?: string | null; is_pro?: boolean | null } | null | undefined;
+
+export function BioflowzyBadge({ bgColor, className = '', profile }: { bgColor?: string; className?: string; profile?: BadgeProfile }) {
+  if (profile && can(profile, 'remove_logo')) return null;
+
   const light = isLightColor(bgColor);
   const textColor = light ? '#000000' : '#FFFFFF';
   const badgeBg = light ? '#000000' : '#FFFFFF';

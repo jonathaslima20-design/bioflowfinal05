@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { GripVertical, Plus, Trash2, X } from 'lucide-react';
 import { SOCIALS, SOCIALS_BY_KEY, normalizeSocial, type SocialKey } from '@/lib/socials';
+import { usePlan } from '@/hooks/use-plan';
+import { LimitBadge, UpgradeBanner } from '@/components/dashboard/LimitBadge';
+import { isUnlimited } from '@/lib/plans';
 
 type Social = {
   id: string;
@@ -20,6 +23,9 @@ export default function SocialsPage() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [selected, setSelected] = useState<SocialKey | null>(null);
   const [handleInput, setHandleInput] = useState('');
+  const { limitOf, reload: reloadPlan } = usePlan();
+  const limit = limitOf('socials');
+  const atLimit = !isUnlimited(limit) && socials.length >= limit;
 
   useEffect(() => {
     (async () => {
@@ -33,12 +39,16 @@ export default function SocialsPage() {
 
   async function confirmAdd() {
     if (!selected) return;
+    if (atLimit) { alert('Limite do plano Free atingido.'); return; }
     const url = normalizeSocial(selected, handleInput);
     if (!url) return alert('Valor inválido.');
     const { data } = await supabase.from('social_links').insert({
       profile_id: profileId, platform: selected, url, position: socials.length,
     }).select().single();
-    if (data) setSocials([...socials, data as Social]);
+    if (data) {
+      setSocials([...socials, data as Social]);
+      reloadPlan();
+    }
     setSelected(null); setHandleInput(''); setPickerOpen(false);
   }
 
@@ -70,13 +80,18 @@ export default function SocialsPage() {
     <div className="max-w-3xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-display text-4xl">Redes sociais</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-4xl">Redes sociais</h1>
+            <LimitBadge current={socials.length} limit={limit} />
+          </div>
           <p className="text-sm font-bold text-black/60 mt-1">Adicione ícones que aparecem abaixo da sua bio.</p>
         </div>
-        <button onClick={() => setPickerOpen(true)} className="brutal-btn bg-bioyellow px-4 py-2 gap-2">
+        <button onClick={() => !atLimit && setPickerOpen(true)} disabled={atLimit} title={atLimit ? 'Limite do plano Free atingido' : ''} className="brutal-btn bg-bioyellow px-4 py-2 gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
           <Plus className="w-4 h-4" /> Adicionar
         </button>
       </div>
+
+      {atLimit && <div className="mb-4"><UpgradeBanner resource="redes sociais" /></div>}
 
       <div className="flex flex-col gap-3">
         {socials.length === 0 && (

@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { GripVertical, Plus, Trash2, Upload, Image as ImageIcon, Info } from 'lucide-react';
+import { usePlan } from '@/hooks/use-plan';
+import { LimitBadge, UpgradeBanner } from '@/components/dashboard/LimitBadge';
+import { isUnlimited } from '@/lib/plans';
 
 type Banner = {
   id: string;
@@ -31,6 +34,9 @@ export default function BannersPage() {
   const [dragging, setDragging] = useState<string | null>(null);
   const [uploading, setUploading] = useState<string | null>(null);
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const { limitOf, reload: reloadPlan } = usePlan();
+  const limit = limitOf('banners');
+  const atLimit = !isUnlimited(limit) && banners.length >= limit;
 
   useEffect(() => {
     (async () => {
@@ -43,10 +49,14 @@ export default function BannersPage() {
   }, []);
 
   async function addBanner() {
+    if (atLimit) return;
     const { data } = await supabase.from('banners').insert({
       profile_id: profileId, image_url: '', link_url: '', size: 'md', position: banners.length,
     }).select().single();
-    if (data) setBanners([...banners, data as Banner]);
+    if (data) {
+      setBanners([...banners, data as Banner]);
+      reloadPlan();
+    }
   }
 
   async function update(id: string, patch: Partial<Banner>) {
@@ -105,13 +115,18 @@ export default function BannersPage() {
     <div className="max-w-3xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-display text-4xl">Banners</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-4xl">Banners</h1>
+            <LimitBadge current={banners.length} limit={limit} />
+          </div>
           <p className="text-sm font-bold text-black/60 mt-1">Faça upload de imagens, defina destino e tamanho.</p>
         </div>
-        <button onClick={addBanner} className="brutal-btn bg-bioyellow px-4 py-2 gap-2">
+        <button onClick={addBanner} disabled={atLimit} title={atLimit ? 'Limite do plano Free atingido' : ''} className="brutal-btn bg-bioyellow px-4 py-2 gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
           <Plus className="w-4 h-4" /> Novo banner
         </button>
       </div>
+
+      {atLimit && <div className="mb-4"><UpgradeBanner resource="banners" /></div>}
 
       <div className="flex flex-col gap-4">
         {banners.length === 0 && (

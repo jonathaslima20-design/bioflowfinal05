@@ -195,7 +195,7 @@ export function AuroraTheme({ profile, links, socials, videos, banners, track, p
         {s.footerText && s.footerText.trim() && (
           <div className="mt-8 text-center text-xs tracking-widest opacity-70" style={{ color: profile.text_color }}>{s.footerText}</div>
         )}
-        {!profile.is_pro && <BioflowzyBadge bgColor={profile.bg_color} />}
+        <BioflowzyBadge profile={profile} bgColor={profile.bg_color} />
         <div aria-hidden className="h-16" />
       </div>
 
