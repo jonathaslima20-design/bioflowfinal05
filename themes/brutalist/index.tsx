@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 const BANNER_HEIGHT: Record<string, string> = { sm: 'aspect-[6/1]', md: 'aspect-[3/1]', lg: 'aspect-[5/2]' };
 
@@ -35,7 +36,7 @@ export const brutalistMeta: BioThemeMeta = {
   ],
 };
 
-export function BrutalistTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function BrutalistTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'brutalist', brutalistMeta.controls);
   const borderColor = s.borderColor || '#000';
   const shadowColor = s.shadowColor || '#000';
@@ -131,17 +132,7 @@ export function BrutalistTheme({ profile, links, socials, videos, banners, track
           {videos.map((v: any) => (
             <div key={v.id} className="bg-white overflow-hidden" style={{ ...borderStyle, ...shadowStyle, borderRadius: radius }}>
               <div className="relative aspect-video bg-black">
-                {v.embed_url ? (
-                  <iframe
-                    src={v.embed_url}
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    onLoad={() => t('video', v.id)}
-                  />
-                ) : v.thumbnail ? (
-                  <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                ) : null}
+                <VideoEmbed video={v} preview={preview} />
                 <span className="absolute top-2 left-2 bg-biored text-white text-[10px] font-bold px-2 py-0.5 brutal-border z-10">
                   {(v.platform || 'VIDEO').toUpperCase()}
                 </span>

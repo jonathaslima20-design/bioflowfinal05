@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const agencyMeta: BioThemeMeta = {
   key: 'agency',
@@ -98,7 +99,7 @@ const TAG_TEXT: Record<string, string> = {
   projects: 'PROJECTS',
 };
 
-export function AgencyTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function AgencyTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'agency', agencyMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#BEF264');
   const bg = profile.bg_color || '#0A0A0A';
@@ -363,11 +364,7 @@ export function AgencyTheme({ profile, links, socials, videos, banners, track }:
                   style={{ border: `1px solid ${text}30` }}
                 >
                   <div className="relative aspect-video bg-black">
-                    {v.embed_url ? (
-                      <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                    ) : v.thumbnail ? (
-                      <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                    ) : null}
+                    <VideoEmbed video={v} preview={preview} />
                   </div>
                   {v.title && (
                     <div

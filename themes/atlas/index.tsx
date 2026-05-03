@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const atlasMeta: BioThemeMeta = {
   key: 'atlas',
@@ -85,7 +86,7 @@ const SHADOWS: Record<string, string> = {
   elevated: '0 4px 6px rgba(15,23,42,0.04), 0 10px 15px rgba(15,23,42,0.08)',
 };
 
-export function AtlasTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function AtlasTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'atlas', atlasMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#2563EB');
   const bg = profile.bg_color || '#F7F9FC';
@@ -319,11 +320,7 @@ export function AtlasTheme({ profile, links, socials, videos, banners, track }: 
               }}
             >
               <div className="relative aspect-video bg-slate-100">
-                {v.embed_url ? (
-                  <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                ) : v.thumbnail ? (
-                  <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                ) : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && (
                 <div className="px-4 py-3 text-sm" style={{ color: text, fontWeight: 500 }}>

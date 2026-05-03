@@ -24,6 +24,7 @@ export type BioThemeProps = {
   videos: any[];
   banners: any[];
   track?: (entity_type: string, entity_id: string | null) => void;
+  preview?: boolean;
 };
 
 export type BioThemeDefaults = {

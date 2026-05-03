@@ -4,6 +4,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const retrowaveMeta: BioThemeMeta = {
   key: 'retrowave',
@@ -53,7 +54,7 @@ const PALETTES: Record<string, { a: string; b: string; c: string }> = {
   berlin: { a: '#34D399', b: '#22D3EE', c: '#A78BFA' },
 };
 
-export function RetrowaveTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function RetrowaveTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'retrowave', retrowaveMeta.controls);
   const pal = PALETTES[s.palette] || PALETTES.miami;
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || pal.a);
@@ -245,11 +246,7 @@ export function RetrowaveTheme({ profile, links, socials, videos, banners, track
           {videos.map((v: any) => (
             <div key={v.id} style={{ border: `2px solid ${pal.c}`, boxShadow: `0 0 16px ${pal.a}66` }}>
               <div className="relative aspect-video bg-black">
-                {v.embed_url ? (
-                  <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                ) : v.thumbnail ? (
-                  <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                ) : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && <div className="px-3 py-2 text-sm font-bold" style={{ color: pal.c, background: '#00000099' }}>{v.title}</div>}
             </div>

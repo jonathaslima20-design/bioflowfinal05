@@ -4,6 +4,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const terminalMeta: BioThemeMeta = {
   key: 'terminal',
@@ -47,7 +48,7 @@ export const terminalMeta: BioThemeMeta = {
 
 const BANNER_H: Record<string, string> = { sm: 'aspect-[6/1]', md: 'aspect-[3/1]', lg: 'aspect-[5/2]' };
 
-export function TerminalTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function TerminalTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'terminal', terminalMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#22D3EE');
   const bg = profile.bg_color || '#0B0F14';
@@ -139,8 +140,7 @@ export function TerminalTheme({ profile, links, socials, videos, banners, track 
             <div key={v.id} className="mt-3">
               <div><span style={{ color: accent }}>{s.prompt} </span><span className="opacity-80">play {v.title || 'video.mp4'}</span></div>
               <div className="mt-1 relative aspect-video overflow-hidden rounded" style={{ border: `1px solid ${accent}44` }}>
-                {v.embed_url ? <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                  : v.thumbnail ? <img src={v.thumbnail} alt="" className="w-full h-full object-cover" /> : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
             </div>
           ))}

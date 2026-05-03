@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const creatorMeta: BioThemeMeta = {
   key: 'creator',
@@ -116,7 +117,7 @@ function buildStickers(mode: string, type: string, accent: string): StickerSpec[
   }));
 }
 
-export function CreatorTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function CreatorTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'creator', creatorMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#FF6B9D');
   const highlightColor = s.useHighlightCustom && s.highlightCustom ? s.highlightCustom : (s.highlightColor || '#FDE047');
@@ -335,11 +336,7 @@ export function CreatorTheme({ profile, links, socials, videos, banners, track }
               }}
             >
               <div className="relative aspect-video bg-black">
-                {v.embed_url ? (
-                  <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                ) : v.thumbnail ? (
-                  <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                ) : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && (
                 <div className="px-4 py-3 text-sm" style={{ color: text, fontWeight: 700 }}>

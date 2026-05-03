@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const cyberMeta: BioThemeMeta = {
   key: 'cyber',
@@ -62,7 +63,7 @@ const PROMPT_COLORS: Record<string, string> = {
   cyan: '#22D3EE',
 };
 
-export function CyberTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function CyberTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'cyber', cyberMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#22D3EE');
   const promptColor = s.usePromptCustom && s.promptCustom
@@ -240,11 +241,7 @@ export function CyberTheme({ profile, links, socials, videos, banners, track }: 
             {videos.map((v: any) => (
               <div key={v.id} style={{ border: `1px solid ${promptColor}66` }}>
                 <div className="relative aspect-video bg-black">
-                  {v.embed_url ? (
-                    <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                  ) : v.thumbnail ? (
-                    <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                  ) : null}
+                  <VideoEmbed video={v} preview={preview} />
                 </div>
                 {v.title && <div className="px-3 py-2 text-xs" style={{ color: profile.text_color }}>&gt; {v.title}</div>}
               </div>

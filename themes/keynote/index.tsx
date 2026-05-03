@@ -6,6 +6,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const keynoteMeta: BioThemeMeta = {
   key: 'keynote',
@@ -71,7 +72,7 @@ function useCountdown(target: string) {
   return delta;
 }
 
-export function KeynoteTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function KeynoteTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'keynote', keynoteMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (s.bandColor || '#EF4444');
   const bg = profile.bg_color || '#0D0D0D';
@@ -202,8 +203,7 @@ export function KeynoteTheme({ profile, links, socials, videos, banners, track }
           {videos.map((v: any) => (
             <figure key={v.id} className="mt-3">
               <div className="relative aspect-video overflow-hidden" style={{ border: `1px solid ${accent}55` }}>
-                {v.embed_url ? <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                  : v.thumbnail ? <img src={v.thumbnail} alt="" className="w-full h-full object-cover" /> : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && <figcaption className="mt-2 text-[10px] tracking-[0.4em] uppercase"><span style={{ color: accent }}>Replay &mdash;</span> <span style={{ color: text, opacity: 0.9 }}>{v.title}</span></figcaption>}
             </figure>

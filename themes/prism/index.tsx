@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const prismMeta: BioThemeMeta = {
   key: 'prism',
@@ -45,7 +46,7 @@ export const prismMeta: BioThemeMeta = {
 
 const BANNER_H: Record<string, string> = { sm: 'aspect-[6/1]', md: 'aspect-[3/1]', lg: 'aspect-[5/2]' };
 
-export function PrismTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function PrismTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'prism', prismMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#A5F3FC');
   const bg = profile.bg_color || '#0A0618';
@@ -124,8 +125,7 @@ export function PrismTheme({ profile, links, socials, videos, banners, track }: 
           {videos.map((v: any) => (
             <div key={v.id} className="overflow-hidden prism-card" style={{ borderRadius: radius, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(0,0,0,0.3)', ['--tilt' as any]: `${s.tiltAmount}deg` }}>
               <div className="relative aspect-video bg-black">
-                {v.embed_url ? <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                  : v.thumbnail ? <img src={v.thumbnail} alt="" className="w-full h-full object-cover" /> : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && <div className="p-3 text-sm opacity-90">{v.title}</div>}
             </div>

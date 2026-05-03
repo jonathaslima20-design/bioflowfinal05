@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const auroraMeta: BioThemeMeta = {
   key: 'aurora',
@@ -50,7 +51,7 @@ export const auroraMeta: BioThemeMeta = {
 const SPEED_MAP: Record<string, string> = { off: '0s', slow: '40s', medium: '22s', fast: '12s' };
 const BANNER_H: Record<string, string> = { sm: 'aspect-[6/1]', md: 'aspect-[3/1]', lg: 'aspect-[5/2]' };
 
-export function AuroraTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function AuroraTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'aurora', auroraMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#7DD3FC');
   const bg = profile.bg_color || '#050B1F';
@@ -184,11 +185,7 @@ export function AuroraTheme({ profile, links, socials, videos, banners, track }:
               style={{ border: '1px solid rgba(255,255,255,0.18)', boxShadow: `0 8px 32px rgba(0,0,0,0.35)`, background: 'rgba(0,0,0,0.3)' }}
             >
               <div className="relative aspect-video bg-black">
-                {v.embed_url ? (
-                  <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                ) : v.thumbnail ? (
-                  <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                ) : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && <div className="p-3 text-sm opacity-90" style={{ color: profile.text_color }}>{v.title}</div>}
             </div>

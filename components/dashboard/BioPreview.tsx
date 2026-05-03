@@ -69,6 +69,7 @@ export function BioPreview({
             videos={videos || []}
             banners={banners || []}
             track={noop}
+            preview
           />
         </div>
       </PhoneFrame>

@@ -4,6 +4,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const consultancyMeta: BioThemeMeta = {
   key: 'consultancy',
@@ -45,7 +46,7 @@ export const consultancyMeta: BioThemeMeta = {
 
 const BANNER_H: Record<string, string> = { sm: 'aspect-[6/1]', md: 'aspect-[3/1]', lg: 'aspect-[5/2]' };
 
-export function ConsultancyTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function ConsultancyTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'consultancy', consultancyMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (s.sealColor || '#E11D22');
   const bg = profile.bg_color || '#FAFAF7';
@@ -137,8 +138,7 @@ export function ConsultancyTheme({ profile, links, socials, videos, banners, tra
           {videos.map((v: any) => (
             <figure key={v.id} className="mt-3">
               <div className="relative aspect-video overflow-hidden" style={{ border: `2px solid ${text}` }}>
-                {v.embed_url ? <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                  : v.thumbnail ? <img src={v.thumbnail} alt="" className="w-full h-full object-cover" /> : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && <figcaption className="mt-2 text-[10px] tracking-[0.4em] uppercase opacity-70"><span style={{ color: accent, fontWeight: 700 }}>Exhibit &mdash;</span> {v.title}</figcaption>}
             </figure>

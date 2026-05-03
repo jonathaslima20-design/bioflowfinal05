@@ -5,6 +5,7 @@ import { SOCIALS_BY_KEY } from '@/lib/socials';
 import type { BioThemeProps, BioThemeMeta } from '@/themes/types';
 import { getThemeSettings, getFontStack } from '@/themes/types';
 import { BioflowzyBadge } from '@/components/bio/BioflowzyBadge';
+import { VideoEmbed } from '@/components/themes/VideoEmbed';
 
 export const conversionMeta: BioThemeMeta = {
   key: 'conversion',
@@ -123,7 +124,7 @@ const CTA_ICONS: Record<string, any> = {
   flame: Flame,
 };
 
-export function ConversionTheme({ profile, links, socials, videos, banners, track }: BioThemeProps) {
+export function ConversionTheme({ profile, links, socials, videos, banners, track, preview }: BioThemeProps) {
   const s = getThemeSettings(profile, 'conversion', conversionMeta.controls);
   const accent = s.useAccentCustom && s.accentCustom ? s.accentCustom : (profile.button_color || '#EA580C');
   const text = profile.text_color || '#1A0F0A';
@@ -339,11 +340,7 @@ export function ConversionTheme({ profile, links, socials, videos, banners, trac
               }}
             >
               <div className="relative aspect-video bg-black">
-                {v.embed_url ? (
-                  <iframe src={v.embed_url} className="absolute inset-0 w-full h-full" allowFullScreen />
-                ) : v.thumbnail ? (
-                  <img src={v.thumbnail} alt="" className="w-full h-full object-cover" />
-                ) : null}
+                <VideoEmbed video={v} preview={preview} />
               </div>
               {v.title && (
                 <div className="px-4 py-3 text-sm" style={{ color: text, fontWeight: 700 }}>
