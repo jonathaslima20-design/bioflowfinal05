@@ -166,6 +166,7 @@ export default function CustomizePage() {
                       videos={demo?.videos}
                       banners={demo?.banners}
                       themeSettings={demo?.themeSettings}
+                      height={454}
                     />
                     {active && (
                       <span className="absolute top-2 right-2 text-[10px] font-bold uppercase bg-black text-white px-2 py-1 brutal-border flex items-center gap-1 z-10">
